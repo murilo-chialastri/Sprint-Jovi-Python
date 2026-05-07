@@ -29,7 +29,6 @@ menu = """
 
 ➜ Opção: """
 foto = ""               #Adição de foto
-op = -1                 #Opção para o While Principal
 fotosSalvas = []        #Lista de fotos salvas
 filtro = "auto*"        #Filtro
 opcFiltro = ['auto*', 'sem filtro', 'cinza']   #Opções de filtro
@@ -49,7 +48,7 @@ def msgFotos():          #Mensagem da foto
 
 
 #              INÍCIO
-while(op != 0):
+while(True):
     op = int(input(menu))
 
 
@@ -86,7 +85,9 @@ while(op != 0):
                 opcFiltro.append(add)
             elif op2 == 3:
                 remove = int(input("Número do filtro que deseja remover: "))    #Remove filtro pelo índice
-                if remove < len(opcFiltro):     #Verifica se o índice existe
+                if len(opcFiltro) == 0:
+                    print("nenhum filtro encontrado")
+                elif remove < len(opcFiltro) :     #Verifica se o índice existe
                     opcFiltro.pop(remove)
                 else:
                     print("Número inválido")
@@ -107,16 +108,29 @@ while(op != 0):
             op2 = int(input("Selecionar foto para apagar (1) Apagar última foto (2) sair (3)")) #Opções de interação
             if op2 == 1:
                 indice = int(input("Qual o número da foto?"))  #Apaga foto selecionada pelo índice
-                if indice < len(fotosSalvas):   #Verifica se o índice existe
+                if len(fotosSalvas) == 0:
+                    print("galeria vázia")
+                elif indice < len(fotosSalvas):   #Verifica se o índice existe
                     fotosSalvas.pop(indice)
                 else:
                     print("Número inválido")
             elif op2 == 2:
+                if len(fotosSalvas) == 0:
+                    print("galeria vázia")
+                else:
                  fotosSalvas.pop()  #Apaga última foto
             elif op2 == 3:
                 break
             else:
                 print("Opção inválida")
+    elif op == 0:
+        print("Desligando.")
+        time.sleep(0.2)
+        print("Desligando..")
+        time.sleep(0.2)
+        print("Desligando...")
+        time.sleep(0.2)
+        break
 
     #         ERRO
     else:

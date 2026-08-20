@@ -1,7 +1,5 @@
-import time
+
 from camera_jovi import executar_sistema
-
-
 
 
 

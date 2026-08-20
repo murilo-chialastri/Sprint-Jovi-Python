@@ -3,12 +3,11 @@ import time
 # variaveis
 foto = ""               #Adição de foto
 fotosSalvas = []  #Lista de fotos salvas
-fotosQualidade = []
+# fotosQualidade = []
 filtro = "auto*"        #Filtro
 opcFiltro = ['auto*', 'sem filtro', 'cinza']   #Opções de filtro
 
-def menu():
-    return """
+menu = """
 ╔════════════════════════════════════╗
 ║                 ●            📶 🔋 ║
 ╠════════════════════════════════════╣
@@ -35,8 +34,7 @@ def menu():
 
 ➜ Opção: """
 
-def menuFotos():
-    return """
+menuFotos ="""
     ╔════════════════════════════════════╗
     ║                 ●            📶 🔋 ║
     ╠════════════════════════════════════╣
@@ -89,11 +87,11 @@ def modoFoco():
     print("focando...")
     time.sleep(0.3)
     print("clique!")
-    fotosQualidade.append(f'({filtro}) {foto} (4k)')
+    fotosSalvas.append(f'({filtro}) {foto} (4k)')
 
 def tirarFoto():
     while (True):
-        op = input(menuFotos())
+        op = input(menuFotos)
         if op == '1':
             tirarFotos()
         elif op == '2':
@@ -146,7 +144,7 @@ def removeFiltro():
     else:
         print("Número inválido")
 
-def opcFiltros():
+def filtros():
     while (True):
         exibirFiltros()
 
@@ -170,30 +168,66 @@ def opcFiltros():
         else:
             print("Opção inválida")
 
-def galeria():
+
+def mostrarGaleria():
     ind = 0
+    print("""
+        ═══════════════════════
+                GALERIA
+        ═══════════════════════
+        """)
     for fotos in fotosSalvas:  # percorre a lista de fotos para mostrar ao usuário
         ind = ind + 1
-        print(f'{fotos} id ="{ind - 1}"')
 
+        print(f"""
+        ║ {fotos} | ID ({ind - 1}) |║""")
+
+
+verificaVazia = lambda: True if len(fotosSalvas) == 0 else False
+verificaIndice = lambda i:  True if i < len(fotosSalvas) else False
+
+def apagarFotos():
+    vazia = verificaVazia()
+    if vazia == True:
+        print("Galeria vazia")
+    else:
+        while True:
+            arg = input("""
+        ╔═════════════════════════════╗
+        ║ Apagar Foto Selecionada (1) ║
+        ║ Apagar Última Foto      (2) ║
+        ║ Sair                    (3) ║                     
+        ╚═════════════════════════════╝
+            """)
+            if arg == '1':
+                mostrarGaleria()
+                i = int(input("Informe o id da foto"))  # Apaga foto selecionada pelo índice
+                indice = verificaIndice
+                if indice == True:  # Verifica se o índice existe
+                    fotosSalvas.pop(i)
+                else:
+                    print("Número inválido")
+            elif arg == '2':(
+                fotosSalvas.pop())  # Apaga última foto
+            else:
+                print("Opção inválida")
+
+
+def galeria():
     #         APAGAR FOTOS
     while (True):
-        op2 = int(
-            input("Selecionar foto para apagar (1) Apagar última foto (2) sair (3)"))  # Opções de interação
-        if op2 == 1:
-            indice = int(input("Qual o número da foto?"))  # Apaga foto selecionada pelo índice
-            if len(fotosSalvas) == 0:
-                print("galeria vázia")
-            elif indice < len(fotosSalvas):  # Verifica se o índice existe
-                fotosSalvas.pop(indice)
-            else:
-                print("Número inválido")
-        elif op2 == 2:
-            if len(fotosSalvas) == 0:
-                print("galeria vázia")
-            else:
-                fotosSalvas.pop()  # Apaga última foto
-        elif op2 == 3:
+        op2 = input("""
+        ╔══════════════════════╗
+        ║ Exibir Galeria   (1) ║
+        ║ Apagar Fotos     (2) ║
+        ║ Sair             (3) ║                     
+        ╚══════════════════════╝
+        """)  # Opções de interação
+        if op2 == '1':
+            mostrarGaleria()
+        elif op2 == '2':
+            apagarFotos()
+        elif op2 == '3':
             break
         else:
             print("Opção inválida")

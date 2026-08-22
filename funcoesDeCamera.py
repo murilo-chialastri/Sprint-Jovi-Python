@@ -3,8 +3,7 @@ import time
 # variaveis
 foto = ""               #Adição de foto
 fotosSalvas = []  #Lista de fotos salvas
-# fotosQualidade = []
-filtro = "auto*"        #Filtro
+filtro = ["auto*"]        #Filtro
 opcFiltro = ['auto*', 'sem filtro', 'cinza']   #Opções de filtro
 
 menu = """
@@ -60,6 +59,9 @@ menuFotos ="""
 
     ➜ Opção: """
 def desligar ():
+    """
+    Função para exibir uma mensagem ao desligar o programa
+    """
     print("Desligando.")
     time.sleep(0.2)
     print("Desligando..")
@@ -68,7 +70,11 @@ def desligar ():
     time.sleep(0.2)
 
 
-def tirarFotos():       #Cria a foto e guarda na lista
+
+def tirarFotos():
+    """
+    Cria uma foto e guarda na lista de fotos
+    """
     foto = input("nome da foto: ")
     print("tirando foto.")
     print("tirando foto..")
@@ -79,6 +85,10 @@ def tirarFotos():       #Cria a foto e guarda na lista
 
 
 def modoFoco():
+    """
+    Cria uma foto e guarda na lista de fotos, porém adiciona '(4k) para simular uma foto com mais qualidade'
+
+    """
     foto = input("nome da foto: ")
     print("focando.")
     time.sleep(0.3)
@@ -87,9 +97,12 @@ def modoFoco():
     print("focando...")
     time.sleep(0.3)
     print("clique!")
-    fotosSalvas.append(f'({filtro}) {foto} (4k)')
+    fotosSalvas.append(f'({filtro[0]}) {foto} (4k)')
 
 def tirarFoto():
+    """
+    Exibir um menu interativo com as opções de tirar foto, utilizando 3 outras funções dentro do while
+    """
     while (True):
         op = input(menuFotos)
         if op == '1':
@@ -119,23 +132,40 @@ def tirarFoto():
 
 
 def exibirFiltros():
-     indf = 0
-     for f in opcFiltro:  # percorre a lista de filtros para mostrar ao usuário
-        indf = indf + 1
-        print(f'{f} id ="{indf - 1}"')
+    """
+    Função para exibir a lista de filtros
+    :return print com os dados do filtro e o índice na lista
+    """
+    contador = 0
+    for f in opcFiltro:  # percorre a lista de filtros para mostrar ao usuário
+        contador = contador + 1
+        print(f'{f} id ="{contador - 1}"')
 
 def selecionarFiltro():
+    """
+    Seleciona um filtro que aparece nos dados da foto
+    :return: modifica o nome do filtro
+    """
     indice = int(input("Qual o número do filtro? "))
     if indice < len(opcFiltro):  # Verifica se o índice existe
-        filtro = opcFiltro[indice]
+        filtro[0] = opcFiltro[indice]
+
     else:
         print("Número inválido")
 
 def addFiltro():
+    """
+    Pede um nome para o filtro novo e o adiciona na lista de filtros
+    :return: adiciona o filtro na lista
+    """
     add = input("Digite o nome do filtro: ")  # Cria e adiciona na lista de filtros
     opcFiltro.append(add)
 
 def removeFiltro():
+    """
+    Remove um filtro da lista pelo índice
+
+    """
     remove = int(input("Número do filtro que deseja remover: "))  # Remove filtro pelo índice
     if len(opcFiltro) == 0:
         print("nenhum filtro encontrado")
@@ -145,8 +175,11 @@ def removeFiltro():
         print("Número inválido")
 
 def filtros():
+    """
+    Menu interativo da sessão Filtros.
+    Utiliza 4 funções dentro do while
+    """
     while (True):
-        exibirFiltros()
 
         op2 = input("""
         ╔═══════════════════════╗
@@ -158,11 +191,13 @@ def filtros():
         :
         """)  # Opções de interação
         if op2 == '1':
+            exibirFiltros()
             selecionarFiltro()
         elif op2 == '2':
             addFiltro()
         elif op2 == '3':
-           removeFiltro()
+            exibirFiltros()
+            removeFiltro()
         elif op2 == '4':
             break
         else:
@@ -170,6 +205,10 @@ def filtros():
 
 
 def mostrarGaleria():
+    """
+    Função para exibir a lista de fotos
+    :return print com os dados das fotos e o índice na lista
+    """
     ind = 0
     print("""
         ═══════════════════════
@@ -187,6 +226,10 @@ verificaVazia = lambda: True if len(fotosSalvas) == 0 else False
 verificaIndice = lambda i:  True if i < len(fotosSalvas) else False
 
 def apagarFotos():
+    """
+    Remove uma foto da lista pelo índice
+
+    """
     vazia = verificaVazia()
     if vazia == True:
         print("Galeria vazia")
@@ -214,7 +257,10 @@ def apagarFotos():
 
 
 def galeria():
-    #         APAGAR FOTOS
+    """
+    Menu interativo da sessão Galeria
+    Utiliza 2 funções dentro do while
+    """
     while (True):
         op2 = input("""
         ╔══════════════════════╗

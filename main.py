@@ -1,5 +1,5 @@
 
-from camera_jovi import executar_sistema
+from cameraJovi import executar_sistema
 
 
 

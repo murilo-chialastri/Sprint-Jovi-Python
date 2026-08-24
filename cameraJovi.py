@@ -2,12 +2,6 @@
 import funcoesDeCamera
 
 
-# variaveis
-
-
-
-
-
 def executar_sistema():
     while (True):
         op = input(funcoesDeCamera.menu)  # Pronto

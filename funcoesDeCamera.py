@@ -64,6 +64,51 @@ menuFotos ="""
     ╚════════════════════════════════════╝
 
     ➜ Opção: """
+
+def salvarGaleriaTxt(galeria):
+
+    arq = open('galeria.txt', 'w', encoding='UTF-8')
+    for foto in galeria:
+
+        linha = f"{foto[0]};{foto[1]};{foto[2]}\n"
+        arq.write(linha)
+    arq.close()
+
+def carregarGaleriaTxt():
+    galeria = []
+
+
+    arq = open('galeria.txt', 'r', encoding='UTF-8')
+    for linha in arq:
+        linha_limpa = linha.strip()
+        if linha_limpa != "":
+
+            dados_foto = linha_limpa.split(';')
+            galeria.append(dados_foto)
+    arq.close()
+
+    return galeria
+
+
+def excluirFotoTxt(indiceApagar):
+    arq = open('galeria.txt', 'r', encoding='UTF-8')
+    linhas = arq.readlines()
+    arq.close()
+
+
+    if -1 <= indiceApagar < len(linhas):
+
+        linhas.pop(indiceApagar)
+
+        arq = open('galeria.txt', 'w', encoding='UTF-8')
+        for linha in linhas:
+            arq.write(linha)
+        arq.close()
+
+
+    else:
+        print("\n Índice inválido!")
+
 def desligar ():
     """
     Função para exibir uma mensagem ao desligar o programa
@@ -97,8 +142,8 @@ def tirarFotos(filtroAtivo):
     print("clique!")
     fotosSalvas.append([foto,filtroAtivo,url])
     print(f"URL da foto gerada: {url}")
+    salvarGaleriaTxt(fotosSalvas)
 
-    return url
 
 def modoFoco(filtroAtivo):
     """
@@ -126,8 +171,8 @@ def modoFoco(filtroAtivo):
     print("clique!")
     fotosSalvas.append([foto, filtroAtivo, '(4k)', url])
     print(f"URL da foto gerada: {url}")
+    salvarGaleriaTxt(fotosSalvas)
 
-    return url
 
 def camera(filtro):
     """
@@ -220,32 +265,36 @@ def filtros(filtro):
             print("Opção inválida")
 
 
-def mostrarGaleria():
+def mostrarGaleria(fotosSalvas):
     """
     Função para exibir a lista de fotos
     :return print com os dados das fotos e o índice na lista
     """
-    ind = 0
-    print("""
-        ═══════════════════════
-                GALERIA
-        ═══════════════════════
-        """)
-    for fotos in fotosSalvas:  # percorre a lista de fotos para mostrar ao usuário
-        ind = ind + 1
+    if len(fotosSalvas) == 0:
+        print("Galeria vazia!")
+    else:
+        ind = 0
+        print("""
+            ═══════════════════════
+                    GALERIA
+            ═══════════════════════
+            """)
+        for fotos in fotosSalvas:  # percorre a lista de fotos para mostrar ao usuário
+            ind = ind + 1
 
-        print(f"""
-        ║ {fotos} | ID ({ind - 1}) |║""")
+            print(f"""
+            ║ {fotos} | ID ({ind - 1}) |║""")
 
 
-verificaVazia = lambda: True if len(fotosSalvas) == 0 else False
-verificaIndice = lambda i:  True if i < len(fotosSalvas) else False
 
-def apagarFotos():
+
+
+def apagarFotos(fotosSalvas):
     """
     Remove uma foto da lista pelo índice
 
     """
+    verificaVazia = lambda: True if len(fotosSalvas) == 0 else False
     vazia = verificaVazia()
     if vazia == True:
         print("Galeria vazia")
@@ -259,22 +308,28 @@ def apagarFotos():
         ╚═════════════════════════════╝
             """)
             if arg == '1':
-                mostrarGaleria()
+                mostrarGaleria(fotosSalvas)
                 i = int(input("Informe o id da foto"))  # Apaga foto selecionada pelo índice
-                indice = verificaIndice
-                if indice == True:  # Verifica se o índice existe
+
+                if i < len(fotosSalvas):  # Verifica se o índice existe
                     fotosSalvas.pop(i)
+                    excluirFotoTxt(i)
+
                 else:
                     print("Número inválido")
-            elif arg == '2':(
-                fotosSalvas.pop())  # Apaga última foto
+            elif arg == '2':
+                if len(fotosSalvas) > 0:
+                    fotosSalvas.pop()  # Apaga última foto
+                    excluirFotoTxt(-1)
+                else:
+                    print("Opção inválida")
             elif arg == '3':
                 break
             else:
                 print("Opção inválida")
 
 
-def galeria():
+def galeria(fotosSalvas):
     """
     Menu interativo da sessão Galeria
     Utiliza 2 funções dentro do while
@@ -288,9 +343,9 @@ def galeria():
         ╚══════════════════════╝
         """)  # Opções de interação
         if op2 == '1':
-            mostrarGaleria()
+            mostrarGaleria(fotosSalvas)
         elif op2 == '2':
-            apagarFotos()
+            apagarFotos(fotosSalvas)
         elif op2 == '3':
             break
         else:
@@ -301,6 +356,8 @@ def galeria():
 def executar_sistema():
     filtroC = filtro
     while (True):
+        fotosSalvas = carregarGaleriaTxt()
+        print(fotosSalvas)
         op = input(menu)  # Pronto
 
         #          TIRAR FOTO E GUARDAR NA GALERIA
@@ -313,7 +370,7 @@ def executar_sistema():
 
         #         VER FOTOS
         elif op == '3':
-            galeria()
+            galeria(fotosSalvas)
         elif op == '0':
             desligar()
             break

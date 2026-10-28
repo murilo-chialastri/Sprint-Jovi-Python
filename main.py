@@ -1,9 +1,11 @@
 
-from cameraJovi import executar_sistema
+from funcoesDeCamera import executar_sistema
 
 #              INÍCIO
 
 executar_sistema()
+
+
 
 
 

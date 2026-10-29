@@ -77,16 +77,17 @@ def salvarGaleriaTxt(galeria):
 def carregarGaleriaTxt():
     galeria = []
 
+    try:
+        arq = open('galeria.txt', 'r', encoding='UTF-8')
+        for linha in arq:
+            linha_limpa = linha.strip()
+            if linha_limpa != "":
 
-    arq = open('galeria.txt', 'r', encoding='UTF-8')
-    for linha in arq:
-        linha_limpa = linha.strip()
-        if linha_limpa != "":
-
-            dados_foto = linha_limpa.split(';')
-            galeria.append(dados_foto)
-    arq.close()
-
+                dados_foto = linha_limpa.split(';')
+                galeria.append(dados_foto)
+        arq.close()
+    except FileNotFoundError:
+        pass
     return galeria
 
 
@@ -141,7 +142,7 @@ def tirarFotos(filtroAtivo):
     print("tirando foto...")
     print("clique!")
     fotosSalvas.append([foto,filtroAtivo,url])
-    print(f"URL da foto gerada: {url}")
+    print(f"URL da foto: {url}")
     salvarGaleriaTxt(fotosSalvas)
 
 
@@ -170,7 +171,7 @@ def modoFoco(filtroAtivo):
     time.sleep(0.3)
     print("clique!")
     fotosSalvas.append([foto, filtroAtivo, '(4k)', url])
-    print(f"URL da foto gerada: {url}")
+    print(f"URL da foto: {url}")
     salvarGaleriaTxt(fotosSalvas)
 
 
@@ -190,17 +191,17 @@ def camera(filtro):
         else:
             print("Opção inválida")
             continue
-        op2 = int(input("""
+        op2 = input("""
         ╔═══════════════════╗
         ║ Tirar outra foto? ║ 
         ║                   ║
         ║  Sim (1)  Não (2) ║
         ╚═══════════════════╝
         :
-        """))
-        if op2 == 2:
+        """)
+        if op2 == '2':
             break
-        elif op2 == 1:
+        elif op2 == '1':
             continue
         else:
             print("Opção inválida")
@@ -229,12 +230,16 @@ def selecionarFiltro():
         "2": "Desfocado",
         "3": "Preto e Branco + Desfocado"
     }
-    indice = int(input("Qual o número do filtro? "))
-    if indice < len(filtrosApi):  # Verifica se o índice existe
-        fil = filtroNome[str(indice)]
-
+    try:
+        indice = int(input("Qual o número do filtro? "))
+    except ValueError:
+        print('O valor deve ser um numero inteiro')
     else:
-        print("Número inválido")
+        if indice < len(filtrosApi):  # Verifica se o índice existe
+            fil = filtroNome[str(indice)]
+
+        else:
+            print("Número inválido")
     filtro = fil
     return filtro
 
@@ -309,14 +314,17 @@ def apagarFotos(fotosSalvas):
             """)
             if arg == '1':
                 mostrarGaleria(fotosSalvas)
-                i = int(input("Informe o id da foto"))  # Apaga foto selecionada pelo índice
-
-                if i < len(fotosSalvas):  # Verifica se o índice existe
-                    fotosSalvas.pop(i)
-                    excluirFotoTxt(i)
-
+                try:
+                    i = int(input("Informe o id da foto"))  # Apaga foto selecionada pelo índice
+                except ValueError:
+                    print('O valor deve ser um numero inteiro')
                 else:
-                    print("Número inválido")
+                    if i < len(fotosSalvas):  # Verifica se o índice existe
+                        fotosSalvas.pop(i)
+                        excluirFotoTxt(i)
+
+                    else:
+                        print("Número inválido")
             elif arg == '2':
                 if len(fotosSalvas) > 0:
                     fotosSalvas.pop()  # Apaga última foto

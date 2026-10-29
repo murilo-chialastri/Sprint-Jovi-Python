@@ -75,20 +75,19 @@ def salvarGaleriaTxt(galeria):
     arq.close()
 
 def carregarGaleriaTxt():
-    galeria = []
+    global fotosSalvas
+    fotosSalvas.clear()
 
     try:
         arq = open('galeria.txt', 'r', encoding='UTF-8')
         for linha in arq:
             linha_limpa = linha.strip()
             if linha_limpa != "":
-
                 dados_foto = linha_limpa.split(';')
-                galeria.append(dados_foto)
+                fotosSalvas.append(dados_foto) # Adiciona diretamente na lista global
         arq.close()
     except FileNotFoundError:
         pass
-    return galeria
 
 
 def excluirFotoTxt(indiceApagar):
@@ -170,7 +169,7 @@ def modoFoco(filtroAtivo):
     print("focando...")
     time.sleep(0.3)
     print("clique!")
-    fotosSalvas.append([foto, filtroAtivo, '(4k)', url])
+    fotosSalvas.append([f'{foto} (4k)', filtroAtivo, url])
     print(f"URL da foto: {url}")
     salvarGaleriaTxt(fotosSalvas)
 
@@ -311,11 +310,11 @@ def apagarFotos(fotosSalvas):
         ║ Apagar Última Foto      (2) ║
         ║ Sair                    (3) ║                     
         ╚═════════════════════════════╝
-            """)
+        : """)
             if arg == '1':
                 mostrarGaleria(fotosSalvas)
                 try:
-                    i = int(input("Informe o id da foto"))  # Apaga foto selecionada pelo índice
+                    i = int(input("Informe o id da foto: "))  # Apaga foto selecionada pelo índice
                 except ValueError:
                     print('O valor deve ser um numero inteiro')
                 else:
@@ -349,7 +348,7 @@ def galeria(fotosSalvas):
         ║ Apagar Fotos     (2) ║
         ║ Sair             (3) ║                     
         ╚══════════════════════╝
-        """)  # Opções de interação
+        : """)  # Opções de interação
         if op2 == '1':
             mostrarGaleria(fotosSalvas)
         elif op2 == '2':
@@ -362,27 +361,23 @@ def galeria(fotosSalvas):
 
 
 def executar_sistema():
+    global fotosSalvas
     filtroC = filtro
+
+
+    carregarGaleriaTxt()
+
     while (True):
-        fotosSalvas = carregarGaleriaTxt()
-        print(fotosSalvas)
-        op = input(menu)  # Pronto
+        op = input(menu)
 
-        #          TIRAR FOTO E GUARDAR NA GALERIA
         if op == '1':
-            camera(filtroC) # Pronto
-
-        #           FILTROS
+            camera(filtroC)
         elif op == '2':
             filtroC = filtros(filtro)
-
-        #         VER FOTOS
         elif op == '3':
             galeria(fotosSalvas)
         elif op == '0':
             desligar()
             break
-
-        #         ERRO
         else:
             print("Opção inválida")
